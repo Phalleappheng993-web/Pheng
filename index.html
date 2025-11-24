@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora - Glassmorphism Portfolio</title>
+    <!-- Load Tailwind CSS -->
+     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheets" href="Style.css">
+    <!-- Configure Tailwind to use Inter font and enable custom glassmorphism utilities -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        /* Custom Class for Glassmorphism Effect */
+        .glass {
+            background-color: rgba(255, 255, 255, 0.15); /* Light transparency */
+            border: 1px solid rgba(255, 255, 255, 0.18); /* Subtle border */
+            backdrop-filter: blur(10px); /* The essential blur effect */
+            -webkit-backdrop-filter: blur(10px); /* Safari support */
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Gentle shadow */
+        }
+
+        /* Custom Class for Fade-in animation */
+        .fade-in-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Define primary colors */
+        :root {
+            --primary-color: #A78BFA; /* Violet-400 */
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'bg-dark': '#0f172a', // Slate-900
+                        'bg-light': '#1e293b', // Slate-800
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bg-dark text-white font-sans min-h-screen">
+
+    <!-- Background Gradient Decoration -->
+    <div class="fixed inset-0 overflow-hidden -z-10">
+        <!-- Top Left Aura -->
+        <div class="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] bg-violet-900 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+        <!-- Bottom Right Aura -->
+        <div class="absolute bottom-[-200px] right-[-200px] w-[600px] h-[600px] bg-sky-700 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000"></div>
+    </div>
+    
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- Sticky Navigation Bar (Glass) -->
+        <header class="sticky top-4 z-50">
+            <nav class="glass rounded-full p-2 flex justify-between items-center max-w-lg mx-auto transition-all duration-300 hover:shadow-xl">
+                <span class="text-lg font-bold text-violet-300 ml-4">Pheng</span>
+                <div class="flex space-x-4 text-sm font-medium">
+                    <a href="#about" class="px-4 py-2 rounded-full hover:bg-white/10 transition duration-200">About</a>
+                    <a href="#projects" class="px-4 py-2 rounded-full hover:bg-white/10 transition duration-200">Projects</a>
+                    <a href="#contact" class="px-4 py-2 rounded-full bg-violet-600 hover:bg-violet-700 transition duration-200 shadow-lg">Contact</a>
+                </div>
+            </nav>
+        </header>
+
+        <!-- 1. Hero Section -->
+        <section id="hero" class="py-24 md:py-36 text-center fade-in-on-scroll">
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold leading-tight tracking-tight">
+                Hi, I'm <span class="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-sky-400">LeeMin Pheng</span>
+            </h1>
+            <p class="text-xl sm:text-2xl mt-4 font-light text-gray-300">
+                A <span id="typing-text" class="font-mono text-violet-300"></span><span class="animate-pulse">|</span>
+            </p>
+            <div class="mt-10">
+                <a href="#projects" class="inline-block px-8 py-3 text-lg font-semibold rounded-full bg-violet-600 hover:bg-violet-700 transition duration-300 shadow-xl shadow-violet-800/50">
+                    View My Work
+                </a>
+            </div>
+        </section>
+
+        <!-- 2. About Me Section -->
+        <section id="about" class="py-20 md:py-24 fade-in-on-scroll">
+            <div class="glass p-8 md:p-12 rounded-3xl max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold mb-6 text-violet-300 border-b border-white/20 pb-3">About Me</h2>
+                <div class="grid md:grid-cols-3 gap-8 items-center">
+                    <div class="md:col-span-2 text-gray-200 space-y-4 text-lg">
+                        <p>My name is Phal Leappheng. I am a passionate Full-Stack Developer with 1 month of experience building modern, responsive, and scalable web applications. My focus is on creating beautiful user experiences that are powered by clean, efficient code.</p>
+                        <p>I specialize in the MERN stack (MySQL, Django, UX/UI, JavaScript, HTML, CSS, C# programing, Java programing, Data Struckture) and I am constantly exploring new technologies like Tailwind CSS, TypeScript, and serverless architectures to improve performance and workflow.</p>
+                    </div>
+                    <div class="md:col-span-1 flex justify-center">
+                        <div class="w-36 h-36 rounded-full bg-cover bg-center border-4 border-violet-400/50" 
+                            style="background-image: url('https://placehold.co/150x150/6d28d9/ffffff?text=AVATAR');">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Projects Section -->
+        <section id="projects" class="py-20 md:py-24">
+            <h2 class="text-3xl font-bold text-center mb-12 text-violet-300 fade-in-on-scroll">Featured Projects</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Project Card 1 -->
+                <div class="glass rounded-xl overflow-hidden p-6 hover:scale-[1.03] transition-transform duration-300 group fade-in-on-scroll">
+                    <div class="h-40 rounded-lg mb-4 bg-sky-800/50 flex items-center justify-center">
+                         <span class="text-4xl text-sky-200">🚀</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-sky-300">Caculator</h3>
+                    <p class="text-gray-300 text-sm mb-4">A real-time built with Hyper Text Make Up Language CSS and JavaScript.</p>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="bg-violet-600/50 px-3 py-1 rounded-full">HTML</span>
+                        <span class="bg-violet-600/50 px-3 py-1 rounded-full">CSS</span>
+                        <span class="bg-violet-600/50 px-3 py-1 rounded-full">JavaScript</span>
+                    </div>
+                   <a href="../Calculator.Project/Index.html" class="mt-4 inline-block text-violet-400 font-medium group-hover:text-violet-300 transition">View Live &rarr;</a>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="glass rounded-xl overflow-hidden p-6 hover:scale-[1.03] transition-transform duration-300 group fade-in-on-scroll">
+                    <div class="h-40 rounded-lg mb-4 bg-purple-800/50 flex items-center justify-center">
+                        <span class="text-4xl text-purple-200">🖊️</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-purple-300">Typing skill</h3>
+                    <p class="text-gray-300 text-sm mb-4">A rich-text editor utilizing machine learning models to suggest copy improvements and style edits.</p>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="bg-violet-600/50 px-3 py-1 rounded-full">TypeScript</span>
+                        <span class="bg-violet-600/50 px-3 py-1 rounded-full">CSS</span>
+                        <span class="bg-violet-600/50 px-3 py-1 rounded-full">Jquery</span>
+                    </div>
+                    <a href="../Typing with Web/index.html" class="mt-4 inline-block text-violet-400 font-medium group-hover:text-violet-300 transition">View Live &rarr;</a>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="glass rounded-xl overflow-hidden p-6 hover:scale-[1.03] transition-transform duration-300 group fade-in-on-scroll">
+                    <div class="h-40 rounded-lg mb-4 bg-red-800/50 flex items-center justify-center">
+                        <span class="text-4xl text-red-200">🎮</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-red-300">Snake Game</h3>
+                    <p class="text-gray-300 text-sm mb-4">A browser-based game using websockets for real-time multiplayer functionality and state synchronization.</p>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="bg-violet-600/50 px-3 py-1 rounded-full">Scipt.js</span>
+                        <span class="bg-violet-600/50 px-3 py-1 rounded-full">Index.html</span>
+                        <span class="bg-violet-600/50 px-3 py-1 rounded-full">style.css</span>
+                    </div>
+                    <a href="../GameCreatae/Index.html" class="mt-4 inline-block text-violet-400 font-medium group-hover:text-violet-300 transition">View Live &rarr;</a>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- 4. Contact Form Section -->
+        <section id="contact" class="py-20 md:py-24 fade-in-on-scroll">
+            <div class="glass p-8 md:p-12 rounded-3xl max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-6 text-violet-300 border-b border-white/20 pb-3 text-center">Get In Touch</h2>
+                
+                <form id="contact-form" class="space-y-4">
+                    <!-- Name -->
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-300 mb-1">Name</label>
+                        <input type="text" id="name" name="name" required
+                            class="w-full p-3 rounded-xl bg-white/10 border border-white/20 focus:ring-violet-500 focus:border-violet-500 text-white placeholder-gray-400 transition"
+                            placeholder="Your Name">
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                        <input type="email" id="email" name="email" required
+                            class="w-full p-3 rounded-xl bg-white/10 border border-white/20 focus:ring-violet-500 focus:border-violet-500 text-white placeholder-gray-400 transition"
+                            placeholder="your.email@example.com">
+                    </div>
+
+                    <!-- Message -->
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-300 mb-1">Message</label>
+                        <textarea id="message" name="message" rows="4" required
+                            class="w-full p-3 rounded-xl bg-white/10 border border-white/20 focus:ring-violet-500 focus:border-violet-500 text-white placeholder-gray-400 transition"
+                            placeholder="I'd love to chat about..."></textarea>
+                    </div>
+
+                    <!-- Submission Button -->
+                    <button type="submit"
+                        class="w-full py-3 bg-violet-600 hover:bg-violet-700 rounded-xl text-lg font-semibold transition duration-300 shadow-xl shadow-violet-800/50">
+                        Send Message
+                    </button>
+                    
+                    <!-- Message Box for Feedback -->
+                    <div id="form-message" class="mt-4 p-4 rounded-xl text-center hidden"></div>
+                </form>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center py-8 text-gray-500 border-t border-white/10 mt-10">
+            <p>&copy; 2024 Alex Morgan. Built with <span class="text-red-500">&hearts;</span> and Glassmorphism.</p>
+        </footer>
+
+    </div>
+    
+    <!-- JavaScript for Typing Animation and Scroll Effects -->
+<script src="Script.js"></script>
+</body>
+</html>
