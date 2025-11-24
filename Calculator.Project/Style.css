@@ -1,0 +1,120 @@
+:root {
+    --bg-color: #f7f9f9;       
+    --display-bg: #eef2f5;     
+    --main-text-color: #333;
+
+    /* Button Colors (Matching the original image) */
+    --number-color: #7f8c8d;   /* Medium grey for numbers */
+    --operator-color: #2ecc71; /* Vibrant green for primary operators */
+    --ac-color: #e74c3c;       /* Red for AC button */
+    
+    --btn-text-color: white;
+    
+    /* Layout */
+    --gap-size: 10px;
+    --button-size: 60px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #ecf0f1; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- 2. Calculator Body and Title --- */
+.calculator {
+    width: 320px; 
+    padding: 20px;
+    border-radius: 15px; 
+    background-color: var(--bg-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.calculator-title {
+    text-align: center;
+    color: var(--main-text-color);
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+/* --- 3. Display Screen --- */
+.display {
+    width: calc(100% - 20px); 
+    height: 60px;
+    margin-bottom: var(--gap-size);
+    padding: 0 10px; 
+    background-color: var(--display-bg);
+    border: none; 
+    border-radius: 8px;
+    text-align: right;
+    font-size: 2.5em;
+    color: var(--main-text-color);
+    line-height: 60px; 
+    overflow: hidden;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); 
+    box-sizing: border-box; 
+}
+
+/* --- 4. Buttons Grid Layout --- */
+.buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gap-size); 
+}
+
+/* --- 5. Base Button Styling --- */
+.buttons-grid button {
+    border: none;
+    border-radius: 10px;
+    font-size: 1.3em;
+    font-weight: 500;
+    color: var(--btn-text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: var(--button-size); 
+}
+
+/* Specific styling for the multiplication cross */
+.buttons-grid button[data-value="*"] {
+    font-size: 1.5em; 
+    font-weight: 700; 
+}
+
+/* --- 6. Specific Button Color Styling --- */
+
+/* Numbers (1-9, 0) */
+.number {
+    background-color: var(--number-color);
+}
+
+/* Primary Operators (+, -, *, %, backspace, +/-) */
+.operator, .control:not(.clear-all) {
+    background-color: var(--operator-color);
+}
+
+/* Special case: AC Button */
+.clear-all {
+    background-color: var(--ac-color);
+}
+
+/* Decimal button color */
+.decimal {
+    background-color: var(--operator-color); 
+}
+
+/* --- 7. Interactive (Hover/Active) States --- */
+.buttons-grid button:hover {
+    filter: brightness(1.1); 
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); 
+}
+
+.buttons-grid button:active {
+    transform: scale(0.98); 
+    box-shadow: none;
+    filter: brightness(0.9);
+}
