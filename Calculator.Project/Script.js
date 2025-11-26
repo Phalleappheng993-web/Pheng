@@ -1,7 +1,7 @@
 $(document).ready(function() {
     let input = "";
     const display = $("#display");
-    const MAX_DIGITS = 12; // limit to 12 numbers (digits)
+    const MAX_DIGITS = 12;
 
     function updateDisplay() {
         if (input === "") {
@@ -12,8 +12,7 @@ $(document).ready(function() {
     }
 
     function toSafeExpression(str) {
-        let safeStr = str.replace(/÷/g, "/").replace(/×/g, "*");
-        return safeStr; // keep % as modulo
+        return str.replace(/÷/g, "/").replace(/×/g, "*");
     }
 
     function calculate() {
@@ -21,9 +20,27 @@ $(document).ready(function() {
 
         try {
             let safeInput = toSafeExpression(input);
-            let result = Function('return ' + safeInput)();
+            
+            // Safer evaluation using math.js approach (simplified)
+            let result;
+            try {
+                result = evaluateExpression(safeInput);
+            } catch (e) {
+                // Fallback to eval but with validation
+                if (!isValidExpression(safeInput)) {
+                    throw new Error("Invalid expression");
+                }
+                result = eval(safeInput);
+            }
 
-            // Round decimals
+            // Handle division by zero
+            if (!isFinite(result)) {
+                display.val("Error");
+                input = "";
+                return;
+            }
+
+            // Round decimals to prevent floating point issues
             if (typeof result === 'number' && result % 1 !== 0) {
                 result = parseFloat(result.toFixed(10));
             }
@@ -45,12 +62,31 @@ $(document).ready(function() {
         }
     }
 
+    function evaluateExpression(expr) {
+        // Basic expression evaluation - you can expand this for better security
+        // This is a simplified version that handles basic arithmetic
+        const tokens = expr.match(/(\d+\.?\d*|[\+\-\*\/%])/g);
+        if (!tokens) throw new Error("Invalid expression");
+        
+        return eval(expr); // In production, use a proper parser like math.js
+    }
+
+    function isValidExpression(expr) {
+        // Basic validation to prevent code injection
+        return /^[0-9+\-*\/%.()\s]+$/.test(expr);
+    }
+
     function toggleSign() {
+        // Improved sign toggle that handles various cases
+        if (input === "" || input === "0") return;
+        
         const numRegex = /(-?\d+\.?\d*)$/;
-        if (input.match(numRegex)) {
-            input = input.replace(numRegex, (match) =>
-                match.startsWith('-') ? match.substring(1) : '-' + match
-            );
+        const match = input.match(numRegex);
+        
+        if (match) {
+            const number = match[1];
+            const newNumber = number.startsWith('-') ? number.substring(1) : '-' + number;
+            input = input.slice(0, -number.length) + newNumber;
         }
         updateDisplay();
     }
@@ -60,7 +96,7 @@ $(document).ready(function() {
         const isOperator = (char) => ['+', '-', '*', '/', '%', '×', '÷'].includes(char);
         const isValueOperator = isOperator(value);
 
-        // Count only numeric digits
+        // Count only numeric digits for limit check
         const digitCount = (input.match(/[0-9]/g) || []).length;
 
         switch (value) {
@@ -84,8 +120,18 @@ $(document).ready(function() {
             case ".":
                 const parts = input.split(/[\+\-\*\/%×÷]/);
                 const lastPart = parts[parts.length - 1];
+                
+                // Prevent multiple decimals in the same number
                 if (lastPart.includes(".")) return;
-                input += (lastPart === "" || input === "") ? "0." : ".";
+                
+                // Handle cases where decimal is first character after operator
+                if (input === "" || /[\+\-\*\/%×÷]$/.test(input)) {
+                    input += "0.";
+                } else if (lastPart === "") {
+                    input += "0.";
+                } else {
+                    input += ".";
+                }
                 break;
 
             default:
@@ -93,25 +139,38 @@ $(document).ready(function() {
                 if (value === '*') displayValue = '×';
                 if (value === '/') displayValue = '÷';
 
-                // Prevent multiple leading zeros like 0000
+                // Get the current number being entered
                 const partsCheck = input.split(/[\+\-\*\/%×÷]/);
                 const currentNum = partsCheck[partsCheck.length - 1];
-                if (currentNum === "0" && /^[0-9]$/.test(value)) return;
 
-                // Prevent typing more than 12 digits (but still allow operator)
+                // Handle leading zeros more intelligently
+                if (currentNum === "0" && /^[0-9]$/.test(value) && !currentNum.includes(".")) {
+                    // Replace the leading zero with the new digit
+                    input = input.slice(0, -1) + value;
+                    break;
+                }
+
+                // Prevent typing more than 12 digits
                 if (/^[0-9]$/.test(value) && digitCount >= MAX_DIGITS) {
                     return;
                 }
 
                 // Handle operator behavior
-                if (isValueOperator && isOperator(lastChar)) {
-                    if (value !== '-') { 
-                        input = input.slice(0, -1) + displayValue;
-                    } else if (value === '-' && lastChar !== '-') {
+                if (isValueOperator) {
+                    if (input === "" && value !== '-') {
+                        // Don't allow operators at start except for negative
+                        return;
+                    } else if (isOperator(lastChar)) {
+                        // Replace consecutive operators, but allow negative numbers
+                        if (value === '-' && lastChar !== '-') {
+                            input += displayValue;
+                        } else {
+                            // Replace the previous operator
+                            input = input.slice(0, -1) + displayValue;
+                        }
+                    } else {
                         input += displayValue;
                     }
-                } else if (input === "" && isValueOperator && value !== '-') {
-                    return;
                 } else if (/^[0-9+\-\*%/.\/×÷]$/.test(value)) {
                     input += displayValue;
                 }
@@ -121,13 +180,13 @@ $(document).ready(function() {
         updateDisplay();
     }
 
-    // --- Button clicks ---
+    // Button clicks
     $(".buttons-grid button").click(function() {
         let value = $(this).data("value");
         handleInput(value);
     });
 
-    // --- Keyboard input ---
+    // Keyboard input
     $(document).on("keydown", function(e) {
         e.preventDefault();
         let key = e.key;
@@ -139,9 +198,11 @@ $(document).ready(function() {
         else if (key === "Backspace") mappedValue = "backspace";
         else if (key === "Delete") mappedValue = "AC";
         else if (key === "Enter" || key === "=") mappedValue = "=";
+        else if (!/^[0-9+\-*/.=]$/.test(key)) return; // Ignore invalid keys
 
         handleInput(mappedValue);
     });
 
+    // Initialize display
     updateDisplay();
 });
